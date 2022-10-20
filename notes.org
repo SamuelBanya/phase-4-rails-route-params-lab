@@ -1,0 +1,48 @@
+* Notes
+<2022-10-20 Thu 16:13>: These are the commands I used:
+#+begin_src bash
+bundle install
+rails db:migrate db:seed
+#+end_src
+
+I then modified the 'config/routes.rb' routes file with the following contents:
+#+begin_src ruby
+Rails.application.routes.draw do
+  get '/students', to: 'students#index'
+  get '/students/grades', to: 'students#grades'
+  get '/students/highest-grade', to: 'students#highest_grade'
+  get "/students/:id", to: "students#show"
+end
+#+end_src
+
+I then modified the contents of the 'app/controllers/students_controller.rb' controller file with the following contents:
+#+begin_src ruby
+class StudentsController < ApplicationController
+
+  def index
+    students = Student.all
+    render json: students
+  end
+
+  def show
+    student = Student.find(params[:id])
+    render json: student
+  end
+
+end
+#+end_src
+
+I checked my work by going to the 'http://127.0.0.1:3000/students/2' URL in a web browser, and had the following JSON response returned to me:
+#+begin_src json
+// 20221020162153
+// http://127.0.0.1:3000/students/2
+
+{
+  "id": 2,
+  "first_name": "Idris",
+  "last_name": "Elba",
+  "grade": 105,
+  "created_at": "2022-10-20T21:14:11.675Z",
+  "updated_at": "2022-10-20T21:14:11.675Z"
+}
+#+end_src
